@@ -1,0 +1,6 @@
+{
+    "app_name": "LiquidSwapTool",
+    "author": "Blockstream",
+    "main_module": "src/main/python/main.py",
+    "version": "VERSION"
+}

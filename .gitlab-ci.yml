@@ -1,0 +1,68 @@
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/pip-cache"
+
+test_build:
+  image: debian:stretch@sha256:724b0fbbda7fda6372ffed586670573c59e07a48c86d606bab05db118abe0ef5
+  tags:
+      - ga
+  cache:
+    paths:
+      - "$CI_PROJECT_DIR/pip-cache"
+    key: "$CI_PROJECT_ID"
+  script:
+    - cd $CI_PROJECT_DIR
+    - ./tools/test.sh
+
+osx_release:
+  tags:
+    - osx
+  artifacts:
+    expire_in: 1 day
+    name: liquidswap-release
+    when: on_success
+    paths:
+    - target/LiquidSwapTool.dmg
+  script:
+    - cd $CI_PROJECT_DIR
+    - ./tools/fbs/installer_mac.sh
+
+ubuntu_release:
+  image: ubuntu:bionic@sha256:f08638ec7ddc90065187e7eabdfac3c96e5ff0f6b2f1762cf31a4f49b53000a5
+  tags:
+    - ga
+  artifacts:
+    expire_in: 1 day
+    name: liquidswap-release
+    when: on_success
+    paths:
+    - target/LiquidSwapTool.deb
+  script:
+    - cd $CI_PROJECT_DIR
+    - ./tools/fbs/installer_ubuntu.sh
+
+windows10_release:
+  tags:
+    - win10
+  artifacts:
+    name: liquidswap-release
+    when: on_success
+    paths:
+    - target\LiquidSwapToolSetup.exe
+  script:
+    - cd %CI_PROJECT_DIR%
+    - tools\fbs\installer_windows.bat
+
+package_release:
+  tags:
+    - garelease
+  stage: deploy
+  artifacts:
+    expire_in: 14 days
+    paths:
+    - $CI_PROJECT_DIR/target/
+    when: on_success
+  script: cd $CI_PROJECT_DIR/target && /opt/process_release
+  dependencies:
+  - ubuntu_release
+  - osx_release
+  - windows10_release

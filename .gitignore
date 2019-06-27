@@ -1,0 +1,8 @@
+venv/*
+*.xcf
+.idea/
+__pycache__
+qa/cache/
+tools/.logs
+src
+target

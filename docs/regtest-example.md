@@ -62,7 +62,7 @@ liquidswap-cli --regtest -c $C1 finalize accepted.txt --send
 ```
 To view the result,
 ```
-$ l1c generate 1
+$ l1c generatetoaddress 1 $(l1c getnewaddress)
 $ l1c getbalance
 $ l2c getbalance
 ```

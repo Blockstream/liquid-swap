@@ -133,3 +133,7 @@ otherwise be hidden from third parties. For further information, you can read mo
 [Confidential Transactions](https://elementsproject.org/features/confidential-transactions).
 
 Once the tool is more established, we plan to overcome such compromises.
+
+# Acknowledgments
+
+Full credit list at [CREDITS.md](CREDITS.md).

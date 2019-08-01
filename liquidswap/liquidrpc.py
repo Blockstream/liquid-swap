@@ -17,7 +17,7 @@ DEFAULT_USER_AGENT = "AuthServiceProxy/0.1"
 
 DEFAULT_HTTP_TIMEOUT = 30
 
-DEFAULT_LIQUID_RPC_PORT = 7041
+DEFAULT_ELEMENTS_RPC_PORT = 7041
 
 unhexlify = lambda h: binascii.unhexlify(h.encode('utf8'))
 hexlify = lambda b: binascii.hexlify(b).decode('utf8')
@@ -86,7 +86,7 @@ class BaseProxy(object):
     def __init__(self,
                  service_url=None,
                  service_port=None,
-                 liquid_conf_file=None,
+                 elements_conf_file=None,
                  timeout=DEFAULT_HTTP_TIMEOUT):
 
         # Create a dummy connection early on so if __init__() fails prior to
@@ -96,22 +96,33 @@ class BaseProxy(object):
         authpair = None
 
         if service_url is None:
-            # Figure out the path to the bitcoin.conf file
-            if liquid_conf_file is None:
+            # Figure out the path to the conf file
+            if elements_conf_file is None:
                 if platform.system() == 'Darwin':
-                    liquid_conf_file = os.path.expanduser('~/Library/Application Support/Liquid/')
+                    elements_conf_file = os.path.expanduser('~/Library/Application Support/Elements/')
                 elif platform.system() == 'Windows':
-                    liquid_conf_file = os.path.join(os.environ['APPDATA'], 'Liquid')
+                    elements_conf_file = os.path.join(os.environ['APPDATA'], 'Elements')
                 else:
-                    liquid_conf_file = os.path.expanduser('~/.liquid')
-                liquid_conf_file = os.path.join(liquid_conf_file, 'liquid.conf')
+                    elements_conf_file = os.path.expanduser('~/.elements')
+                elements_conf_file = os.path.join(elements_conf_file, 'elements.conf')
 
-            # Bitcoin Core accepts empty rpcuser, not specified in btc_conf_file
+            # To avoid backward incompatibilty, try to look for the liquid
+            # binaries default dir and conf.
+            if not os.path.exists(elements_conf_file):
+                if platform.system() == 'Darwin':
+                    elements_conf_file = os.path.expanduser('~/Library/Application Support/Liquid/')
+                elif platform.system() == 'Windows':
+                    elements_conf_file = os.path.join(os.environ['APPDATA'], 'Liquid')
+                else:
+                    elements_conf_file = os.path.expanduser('~/.liquid')
+                elements_conf_file = os.path.join(elements_conf_file, 'liquid.conf')
+
+            # Elements Core accepts empty rpcuser, not specified in elements_conf_file
             conf = {'rpcuser': ""}
 
-            # Extract contents of liquid.conf to build service_url
+            # Extract contents of elements.conf to build service_url
             try:
-                with open(liquid_conf_file, 'r') as fd:
+                with open(elements_conf_file, 'r') as fd:
                     for line in fd.readlines():
                         if '#' in line:
                             line = line[:line.index('#')]
@@ -120,7 +131,7 @@ class BaseProxy(object):
                         k, v = line.split('=', 1)
                         conf[k.strip()] = v.strip()
 
-            # Treat a missing liquid.conf as though it were empty
+            # Treat a missing elements.conf as though it were empty
             except FileNotFoundError:
                 pass
 
@@ -131,7 +142,7 @@ class BaseProxy(object):
                     conf[key[(len(chain) + 1):]] = conf.pop(key)
 
             if service_port is None:
-                service_port = DEFAULT_LIQUID_RPC_PORT
+                service_port = DEFAULT_ELEMENTS_RPC_PORT
             conf['rpcport'] = int(conf.get('rpcport', service_port))
             conf['rpchost'] = conf.get('rpcconnect', 'localhost')
 
@@ -141,7 +152,7 @@ class BaseProxy(object):
             if 'rpcwallet' in conf:
                 service_url += ('/wallet/%s' % conf['rpcwallet'])
 
-            cookie_dir = conf.get('datadir', os.path.dirname(liquid_conf_file))
+            cookie_dir = conf.get('datadir', os.path.dirname(elements_conf_file))
             cookie_dir = os.path.join(cookie_dir, chain)
             cookie_file = conf.get('rpccookiefile', os.path.join(cookie_dir, ".cookie"))
             try:
@@ -152,7 +163,7 @@ class BaseProxy(object):
                     authpair = "%s:%s" % (conf['rpcuser'], conf['rpcpassword'])
 
                 else:
-                    raise ValueError('Cookie file unusable (%s) and rpcpassword not specified in the configuration file: %r' % (err, liquid_conf_file))
+                    raise ValueError('Cookie file unusable (%s) and rpcpassword not specified in the configuration file: %r' % (err, elements_conf_file))
 
         else:
             url = urlparse.urlparse(service_url)
@@ -250,12 +261,12 @@ class RawProxy(BaseProxy):
     def __init__(self,
                  service_url=None,
                  service_port=None,
-                 liquid_conf_file=None,
+                 elements_conf_file=None,
                  timeout=DEFAULT_HTTP_TIMEOUT,
                  **kwargs):
         super(RawProxy, self).__init__(service_url=service_url,
                                        service_port=service_port,
-                                       liquid_conf_file=liquid_conf_file,
+                                       elements_conf_file=elements_conf_file,
                                        timeout=timeout,
                                        **kwargs)
 

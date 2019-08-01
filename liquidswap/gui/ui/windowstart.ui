@@ -241,7 +241,7 @@
   </action>
   <action name="actionConf">
    <property name="text">
-    <string>Specify liquid.conf…</string>
+    <string>Specify elements.conf…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+C</string>
@@ -249,7 +249,7 @@
   </action>
   <action name="actionURL">
    <property name="text">
-    <string>Liquid node URL…</string>
+    <string>Elements node URL…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+U</string>

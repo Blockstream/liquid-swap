@@ -348,7 +348,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Specify liquid.conf…</string>
+    <string>Specify elements.conf…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+C</string>
@@ -359,7 +359,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Liquid Node URL…</string>
+    <string>Elements Node URL…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+U</string>

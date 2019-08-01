@@ -181,8 +181,8 @@ class Ui_AcceptWindow(object):
         self.actionExit.setShortcut(_translate("AcceptWindow", "Ctrl+Q"))
         self.actionAbout.setText(_translate("AcceptWindow", "About"))
         self.actionAbout.setShortcut(_translate("AcceptWindow", "Ctrl+H"))
-        self.actionConf.setText(_translate("AcceptWindow", "Specify liquid.conf…"))
+        self.actionConf.setText(_translate("AcceptWindow", "Specify elements.conf…"))
         self.actionConf.setShortcut(_translate("AcceptWindow", "Ctrl+Shift+C"))
-        self.actionURL.setText(_translate("AcceptWindow", "Liquid Node URL…"))
+        self.actionURL.setText(_translate("AcceptWindow", "Elements Node URL…"))
         self.actionURL.setShortcut(_translate("AcceptWindow", "Ctrl+Shift+U"))
 

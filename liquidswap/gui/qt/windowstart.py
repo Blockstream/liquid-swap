@@ -126,9 +126,9 @@ class Ui_StartWindow(object):
         self.actionExit.setShortcut(_translate("StartWindow", "Ctrl+Q"))
         self.actionAbout.setText(_translate("StartWindow", "About"))
         self.actionAbout.setShortcut(_translate("StartWindow", "Ctrl+H"))
-        self.actionConf.setText(_translate("StartWindow", "Specify liquid.conf…"))
+        self.actionConf.setText(_translate("StartWindow", "Specify elements.conf…"))
         self.actionConf.setShortcut(_translate("StartWindow", "Ctrl+Shift+C"))
-        self.actionURL.setText(_translate("StartWindow", "Liquid node URL…"))
+        self.actionURL.setText(_translate("StartWindow", "Elements node URL…"))
         self.actionURL.setShortcut(_translate("StartWindow", "Ctrl+Shift+U"))
 
 from liquidswap.gui import resource_rc

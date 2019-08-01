@@ -3,7 +3,7 @@ import logging
 from liquidswap.constants import (
     PROPOSED_KEYS,
     ACCEPTED_KEYS,
-    LIQUID_MIN_VERSION,
+    ELEMENTS_MIN_VERSION,
     WALLET_MIN_VERSION,
     OWN_PROPOSAL_ERROR_MSG,
 )
@@ -61,9 +61,9 @@ def check_liquid_version(connection):
     """Raise error if Liquid version is below min supported
     """
     network_info = connection.getnetworkinfo()
-    if network_info.get('version', 0) < LIQUID_MIN_VERSION:
+    if network_info.get('version', 0) < ELEMENTS_MIN_VERSION:
         msg = 'Unsupported liquid version, must be at least {}'.format(
-            LIQUID_MIN_VERSION)
+            ELEMENTS_MIN_VERSION)
         raise UnsupportedLiquidVersionError(msg)
 
 

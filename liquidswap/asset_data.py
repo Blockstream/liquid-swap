@@ -12,7 +12,7 @@ class AssetsData(object):
         self.balances = dict()
         # keys are expected to be always the same
 
-        # labels not coming from liquid-cli, they are intended only for
+        # labels not coming from elements-cli, they are intended only for
         # receiving purposes and have no balance
         self.temp_labels = dict()
 
@@ -49,9 +49,9 @@ class AssetsData(object):
 
         if asset_id in self.labels:
             # FIXME: change this message once it's possible to edit labels from
-            #        liquid-cli
+            #        elements-cli
             msg = 'Asset already in the wallet, modify its label editing the' \
-                   'liquid.conf'
+                   'elements.conf'
             raise InvalidAssetIdError(msg)
 
         if not allow_update and asset_id in self.temp_labels:

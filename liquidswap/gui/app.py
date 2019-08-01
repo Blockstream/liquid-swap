@@ -59,17 +59,17 @@ def set_balance_label(asset_data, combo_box, label):
 
 def set_url_tip(service_url, action):
     if service_url:
-        action.setStatusTip('Liquid Node URL: {}'.format(service_url))
+        action.setStatusTip('Elements Node URL: {}'.format(service_url))
 
 
-def set_conf_tip(liquid_conf_file, action):
-    if liquid_conf_file:
-        action.setStatusTip('liquid.conf: {}'.format(liquid_conf_file))
+def set_conf_tip(elements_conf_file, action):
+    if elements_conf_file:
+        action.setStatusTip('elements.conf: {}'.format(elements_conf_file))
 
 
 def setup_toolbar(parent, window):
     set_url_tip(parent.credentials['service_url'], window.actionURL)
-    set_conf_tip(parent.credentials['liquid_conf_file'], window.actionConf)
+    set_conf_tip(parent.credentials['elements_conf_file'], window.actionConf)
 
     window.actionNew.triggered.connect(
         lambda: InitialWindow(parent=parent))
@@ -351,12 +351,12 @@ class InitialWindow(QMainWindow, Ui_StartWindow):
 class LiquidSwapToolWindow(QMainWindow):
     """Parent window holding session data"""
 
-    def __init__(self, service_url=None, liquid_conf_file=None,
+    def __init__(self, service_url=None, elements_conf_file=None,
                  is_mainnet=False):
         QMainWindow.__init__(self)
 
         self.credentials = {
-            'liquid_conf_file': liquid_conf_file,
+            'elements_conf_file': elements_conf_file,
             'service_url': service_url,
             'service_port': (None if is_mainnet else DEFAULT_REGTEST_RPC_PORT),
         }
@@ -386,18 +386,19 @@ class LiquidSwapToolWindow(QMainWindow):
 
     def change_conf_file(self, action):
         filename, _ = QFileDialog.getOpenFileName(
-            self, 'Choose liquid.conf',
-            self.credentials['liquid_conf_file'] or os.path.expanduser('~'))
+            self, 'Choose elements.conf',
+            self.credentials['elements_conf_file'] or os.path.expanduser('~'))
         if not filename:
             return
         try:
             with open(filename, 'r') as r:
                 temp = self.credentials
-                temp['liquid_conf_file'] = filename
+                temp['elements_conf_file'] = filename
                 with ConnCtx(temp, self.critical) as cc:
                     do_initial_checks(cc.connection, self.is_mainnet)
                     self.credentials = temp
-                    set_conf_tip(self.credentials['liquid_conf_file'], action)
+                    set_conf_tip(self.credentials['elements_conf_file'],
+                                 action)
         except IOError:
             # FIXME: is this reachable?
             pass
@@ -467,9 +468,9 @@ def parse_args():
     parser.add_argument('--version', action='version',
                         version='v{}'.format(__version__))
     parser.add_argument('-c', '--conf-file',
-                        help='Specify liquid.conf file for authentication.')
+                        help='Specify elements.conf file for authentication.')
     parser.add_argument('-u', '--service-url',
-                        help='Specify Liquid node URL for authentication.')
+                        help='Specify Elements node URL for authentication.')
     parser.add_argument('-r', '--regtest', action='store_true',
                         help='Use with regtest.')
     parser.add_argument('-v', '--verbose', action='count',
@@ -479,7 +480,7 @@ def parse_args():
 
     return {
         'service_url': args.service_url,
-        'liquid_conf_file': args.conf_file,
+        'elements_conf_file': args.conf_file,
         'is_mainnet': not args.regtest,
     }
 

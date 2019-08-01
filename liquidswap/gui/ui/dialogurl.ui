@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Specify Liquid Node URL</string>
+   <string>Specify Elements Node URL</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -21,7 +21,7 @@
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Liquid Node URL: </string>
+          <string>Elements Node URL: </string>
          </property>
         </widget>
        </item>

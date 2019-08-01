@@ -35,9 +35,9 @@ ConnParams = namedtuple('ConnParams', ['credentials', 'is_mainnet'])
 
 @click.group()
 @click.option('-u', '--service-url', default=None, type=str,
-              help='Specify Liquid node URL for authentication.')
+              help='Specify Elements node URL for authentication.')
 @click.option('-c', '--conf-file', default=None, type=str,
-              help='Specify liquid.conf file for authentication.')
+              help='Specify elements.conf file for authentication.')
 @click.option('-r', '--regtest', is_flag=True, help='Use with regtest.')
 @click.option('-v', '--verbose', count=True,
               help='Print more information, may be used multiple times.')
@@ -51,7 +51,7 @@ def cli(ctx, service_url, conf_file, regtest, verbose):
 
     is_mainnet = not regtest
     credentials = {
-        'liquid_conf_file': conf_file,
+        'elements_conf_file': conf_file,
         'service_url': service_url,
         'service_port': (None if is_mainnet else DEFAULT_REGTEST_RPC_PORT),
     }

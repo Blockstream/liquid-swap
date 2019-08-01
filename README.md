@@ -7,12 +7,12 @@ between the parties.
 
 ## Getting started
 
-To run the tool you need to have an instance of the Liquid v0.17 daemon (liquidd) running.
-You can download the latest Liquid node binaries from the GitHub [repository](https://github.com/ElementsProject/elements/releases).
+To run the tool you need to have an instance of the Elements v0.17 daemon (elementsd) running.
+You can download the latest Elements node binaries from the GitHub [repository](https://github.com/ElementsProject/elements/releases).
 
 You can download the swap tool installers from the Liquid swap tool [release page](https://github.com/Blockstream/liquid-swap/releases), or you can install the tool from source.
 
-The guide assumes that you are running using the Liquid default configurations. If you are not using the defaults, refer to the [authentication](docs/authentication.md) page.
+The guide assumes that you are running using the Elements default configurations. If you are not using the defaults, refer to the [authentication](docs/authentication.md) page.
 
 For more information and for troubleshooting see the [FAQ page](docs/faq.md).
 
@@ -37,7 +37,7 @@ Run the CLI:
 liquidswap-cli
 ```
 
-To run the Liquid swap tool in regtest mode, see the [regtest example page](docs/regtest-example.md). This page has instructions that show you how to run two instances of liquidd on the same regtest network, allowing you to test swaps with yourself.
+To run the Liquid swap tool in regtest mode, see the [regtest example page](docs/regtest-example.md). This page has instructions that show you how to run two instances of elementsd on the same regtest network, allowing you to test swaps with yourself.
 
 ## Executing a swap
 
@@ -101,7 +101,7 @@ liquidswap-cli finalize accepted.txt --send
 
 
 ## Regtest
-To use the tool locally against two regtest instances of Liquid, follow
+To use the tool locally against two regtest instances of Elements, follow
 the [Regtest example](docs/regtest-example.md) instructions.
 
 ## Current risk and limitations

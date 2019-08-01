@@ -40,7 +40,7 @@ class Ui_URLDialog(object):
 
     def retranslateUi(self, URLDialog):
         _translate = QtCore.QCoreApplication.translate
-        URLDialog.setWindowTitle(_translate("URLDialog", "Specify Liquid Node URL"))
-        self.label.setText(_translate("URLDialog", "Liquid Node URL: "))
+        URLDialog.setWindowTitle(_translate("URLDialog", "Specify Elements Node URL"))
+        self.label.setText(_translate("URLDialog", "Elements Node URL: "))
         self.lineEditURL.setPlaceholderText(_translate("URLDialog", "http://user:authdata@localhost:7041"))
 

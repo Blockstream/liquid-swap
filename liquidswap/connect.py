@@ -4,12 +4,12 @@ from liquidswap.exceptions import LiquidSwapError
 
 DEFAULT_REGTEST_RPC_PORT = 7040
 CONNECTION_ERROR_MESSAGE = \
-    'Unable to connect to Liquid Node. Are you sure you have started the ' \
+    'Unable to connect to Elements Node. Are you sure you have started the ' \
     'node and the parameters are correct?'
 
 
 class ConnectionError(ValueError):
-    """Unable to connect to the Liquid node"""
+    """Unable to connect to the Elements node"""
 
 
 class ConnCtx(object):
@@ -32,7 +32,7 @@ class ConnCtx(object):
 
     @property
     def connection(self):
-        """Get a connection with the Liquid node
+        """Get a connection with the Elements node
         """
         try:
             return RawProxy(**self.credentials)
@@ -44,7 +44,7 @@ class ConnCtx(object):
         if not typ:
             pass
         elif issubclass(typ, JSONRPCError):
-            self.critical(title='Liquid Node Error',
+            self.critical(title='Elements Node Error',
                           message=value.error.get('message'),
                           start_over=self.start_over)
         elif issubclass(typ, LiquidSwapError):

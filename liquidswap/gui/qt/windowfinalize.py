@@ -177,8 +177,8 @@ class Ui_FinalizeWindow(object):
         self.actionExit.setShortcut(_translate("FinalizeWindow", "Ctrl+Q"))
         self.actionAbout.setText(_translate("FinalizeWindow", "About"))
         self.actionAbout.setShortcut(_translate("FinalizeWindow", "Ctrl+H"))
-        self.actionConf.setText(_translate("FinalizeWindow", "Specify liquid.conf…"))
+        self.actionConf.setText(_translate("FinalizeWindow", "Specify elements.conf…"))
         self.actionConf.setShortcut(_translate("FinalizeWindow", "Ctrl+Shift+C"))
-        self.actionURL.setText(_translate("FinalizeWindow", "Liquid Node URL…"))
+        self.actionURL.setText(_translate("FinalizeWindow", "Elements Node URL…"))
         self.actionURL.setShortcut(_translate("FinalizeWindow", "Ctrl+Shift+U"))
 

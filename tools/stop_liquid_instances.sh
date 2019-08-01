@@ -1,5 +1,5 @@
 #!/bin/sh
 
-echo "** Stopping liquid regtest instances..."
-${LIQUIDPATH}/liquid-cli -conf=$C1 stop
-${LIQUIDPATH}/liquid-cli -conf=$C2 stop
+echo "** Stopping elements regtest instances..."
+${ELEMENTSPATH}/elements-cli -conf=$C1 stop
+${ELEMENTSPATH}/elements-cli -conf=$C2 stop

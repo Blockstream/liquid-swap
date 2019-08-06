@@ -27,7 +27,7 @@ $ echo $C1
 {home folder}/liquiddir1/liquid.conf
 ```
 
-Start liquid liquid regtest instances,
+Start liquid regtest instances,
 ```
 ./tools/start_liquid_instances.sh
 ```

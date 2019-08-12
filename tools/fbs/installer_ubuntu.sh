@@ -9,7 +9,7 @@ gem install --no-ri --no-rdoc fpm
 virtualenv -p python3 .venvfbs
 source .venvfbs/bin/activate
 pip install -r ./tools/fbs/requirements.txt
-pip install .
+pip install .[GUI]
 ./tools/fbs/cleanup.sh
 ./tools/fbs/setup.sh
 fbs freeze

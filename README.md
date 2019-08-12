@@ -24,8 +24,13 @@ Clone the repository and install GUI and CLI:
 ```
 git clone https://github.com/Blockstream/liquid-swap
 cd liquid-swap
-pip install .
 ```
+
+Install the GUI and CLI:
+```
+pip install .[GUI,CLI]
+```
+Note that, if GUI is not needed, `pip install .[CLI]` will skip GUI dependencies.
 
 Run the GUI:
 ```

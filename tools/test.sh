@@ -15,7 +15,7 @@ apt install --no-install-recommends -yqq curl python3-pip python3-setuptools pyt
 
 virtualenv -p python3 venv
 source venv/bin/activate
-pip install .
+pip install .[CLI,GUI]
 
 pip install pycodestyle
 # exclude copied and generated files

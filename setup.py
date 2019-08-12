@@ -9,16 +9,16 @@ setup(
     python_requires='>=3.5',
     packages=find_packages(),
     include_package_data=True,
-    install_requires=[
-        'Click==7.0',
-        'PyQt5==5.11.3',
-    ],
+    extras_require={
+        'CLI': ['Click==7.0'],
+        'GUI': ['PyQt5==5.11.3'],
+    },
     entry_points={
         'console_scripts': [
-            'liquidswap-cli=liquidswap.cli:cli',
+            'liquidswap-cli=liquidswap.cli:cli [CLI]',
         ],
         'gui_scripts': [
-            'liquidswap-gui=liquidswap.gui.app:main',
+            'liquidswap-gui=liquidswap.gui.app:main [GUI]',
         ],
     },
     description='Tool to swap Issued Asset on the Liquid Network using Confidential Transactions',

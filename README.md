@@ -7,7 +7,7 @@ between the parties.
 
 ## Getting started
 
-To run the tool you need to have an instance of the Elements v0.17 daemon (elementsd) running.
+To run the tool you need to have an instance of the Elements v0.17+ daemon (elementsd) running.
 You can download the latest Elements node binaries from the GitHub [repository](https://github.com/ElementsProject/elements/releases).
 
 You can download the swap tool installers from the Liquid swap tool [release page](https://github.com/Blockstream/liquid-swap/releases), or you can install the tool from source.

@@ -58,14 +58,23 @@ def propose(amount_p, asset_p,
 
     c_address_p = connection.getnewaddress()
     u_address_p = connection.getaddressinfo(c_address_p)['unconfidential']
+    elements_version = connection.getnetworkinfo()['version']
 
-    txu = connection.createrawtransaction(
-        [],
-        {DUMMY_ADDRESS_CONFIDENTIAL[is_mainnet]: sat2btc(amount_p)},
-        NLOCKTIME,
-        IS_REPLACEABLE,
-        {DUMMY_ADDRESS_CONFIDENTIAL[is_mainnet]: asset_p}
-    )
+    if elements_version < 210000:
+        txu = connection.createrawtransaction(
+            [],
+            {DUMMY_ADDRESS_CONFIDENTIAL[is_mainnet]: sat2btc(amount_p)},
+            NLOCKTIME,
+            IS_REPLACEABLE,
+            {DUMMY_ADDRESS_CONFIDENTIAL[is_mainnet]: asset_p}
+        )
+    else:
+        txu = connection.createrawtransaction(
+            [],
+            [{DUMMY_ADDRESS_CONFIDENTIAL[is_mainnet]: sat2btc(amount_p), 'asset': asset_p}],
+            NLOCKTIME,
+            IS_REPLACEABLE
+        )
 
     # FIXME: consider locking unspents.
     details = {
@@ -127,13 +136,21 @@ def propose(amount_p, asset_p,
     map_asset.update({c_address_p: asset_r})
     map_confidential.update({u_address_p: c_address_p})
 
-    tx = connection.createrawtransaction(
-        inputs,
-        values2btc(map_amount),
-        NLOCKTIME,
-        IS_REPLACEABLE,
-        map_asset
-    )
+    if elements_version < 210000:
+        tx = connection.createrawtransaction(
+            inputs,
+            values2btc(map_amount, None),
+            NLOCKTIME,
+            IS_REPLACEABLE,
+            map_asset
+        )
+    else:
+        tx = connection.createrawtransaction(
+            inputs,
+            values2btc(map_amount, map_asset),
+            NLOCKTIME,
+            IS_REPLACEABLE
+        )
 
     logging.debug('Proposer address: {}'.format(u_address_p))
     logging.debug('Address map: {}'.format(map_confidential))
@@ -261,16 +278,25 @@ def accept(tx_p,
     c_address_r = connection.getnewaddress()
     u_address_r = connection.validateaddress(c_address_r)['unconfidential']
     u_address_p = connection.validateaddress(c_address_p)['unconfidential']
+    elements_version = connection.getnetworkinfo()['version']
     logging.debug('Receiver address: {}'.format(u_address_r))
     logging.debug('Proposer address: {}'.format(u_address_p))
 
-    txu = connection.createrawtransaction(
-        [],
-        {c_address_p: sat2btc(amount_r)},
-        NLOCKTIME,
-        IS_REPLACEABLE,
-        {c_address_p: asset_r}
-    )
+    if elements_version < 210000:
+        txu = connection.createrawtransaction(
+            [],
+            {c_address_p: sat2btc(amount_r)},
+            NLOCKTIME,
+            IS_REPLACEABLE,
+            {c_address_p: asset_r}
+        )
+    else:
+        txu = connection.createrawtransaction(
+            [],
+            [{c_address_p: sat2btc(amount_r), 'asset': asset_r}],
+            NLOCKTIME,
+            IS_REPLACEABLE
+        )
 
     details = {
         # 'lockUnspents': False,
@@ -343,13 +369,21 @@ def accept(tx_p,
 
     logging.debug('Creating swap transaction')
     # createrawtransaction with the inputs from the 2 transactions
-    tx = connection.createrawtransaction(
-        inputs,
-        sort_dict(values2btc(map_amount)),
-        NLOCKTIME,
-        IS_REPLACEABLE,
-        sort_dict(map_asset)
-    )
+    if elements_version < 210000:
+        tx = connection.createrawtransaction(
+            inputs,
+            sort_dict(values2btc(map_amount, None)),
+            NLOCKTIME,
+            IS_REPLACEABLE,
+            sort_dict(map_asset)
+        )
+    else:
+        tx = connection.createrawtransaction(
+            inputs,
+            values2btc(sort_dict(map_amount), map_asset),
+            NLOCKTIME,
+            IS_REPLACEABLE
+        )
 
     # inputs may be reordered by createrawtransaction
     inputs = connection.decoderawtransaction(tx)['vin']

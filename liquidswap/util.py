@@ -24,10 +24,17 @@ def btc2sat(btc):
 def sat2btc(sat):
     return round(sat * 10**-8, 8)
 
-
-def values2btc(m):
-    return {k: sat2btc(v) for k, v in m.items()}
-
+def values2btc(m, a):
+    if a is None:
+        return {k: sat2btc(v) for k, v in m.items()}
+    else:
+        ret = []
+        for k, v in m.items():
+            dict_addr = {k: sat2btc(v)}
+            if k in a:
+                dict_addr["asset"] = a[k]
+            ret.append(dict_addr)
+        return ret
 
 def sort_dict(d):
     return {k: v for k, v in sorted(d.items())}

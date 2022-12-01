@@ -114,9 +114,13 @@ def propose(amount_p, asset_p,
     map_confidential = dict()
 
     for output in outputs:
+        u_address = None
         if 'addresses' in output['scriptPubKey']:
             u_address = output['scriptPubKey']['addresses'][0]
+        elif 'address' in output['scriptPubKey']:
+            u_address = output['scriptPubKey']['address']
 
+        if u_address is not None:
             if u_address == DUMMY_ADDRESS[is_mainnet]:
                 key = u_address
             else:
@@ -198,9 +202,13 @@ def parse_proposed(tx,
     map_asset_p = dict()
 
     for output in outputs:
+        u_address = None
         if 'addresses' in output['scriptPubKey']:
             u_address = output['scriptPubKey']['addresses'][0]
+        elif 'address' in output['scriptPubKey']:
+            u_address = output['scriptPubKey']['address']
 
+        if u_address is not None:
             if u_address == DUMMY_ADDRESS[is_mainnet]:
                 if asset_p:
                     raise UnexpectedValueError('Found more than one dummy '
@@ -330,9 +338,13 @@ def accept(tx_p,
     map_asset_r = dict()
 
     for output in outputs_r:
+        u_address = None
         if 'addresses' in output['scriptPubKey']:
             u_address = output['scriptPubKey']['addresses'][0]
+        elif 'address' in output['scriptPubKey']:
+            u_address = output['scriptPubKey']['address']
 
+        if u_address is not None:
             if u_address == u_address_p:
                 c_address = c_address_p
             else:
@@ -524,8 +536,13 @@ def parse_accepted(signed_tx,
         if 'value' not in output:
             raise UnblindError('Transaction is not fully unblinded')
 
+        u_address = None
         if 'addresses' in output['scriptPubKey']:
             u_address = output['scriptPubKey']['addresses'][0]
+        elif 'address' in output['scriptPubKey']:
+            u_address = output['scriptPubKey']['address']
+
+        if u_address is not None:
             amount = btc2sat(output['value'])
             asset = output['asset']
 

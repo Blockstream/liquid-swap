@@ -8,6 +8,7 @@ from liquidswap.constants import (
     OWN_PROPOSAL_ERROR_MSG,
     NETWORK_REGTEST,
     NETWORK_MAINNET,
+    NETWORK_LIQUIDTESTNET,
     NETWORK_NAMES,
 )
 from liquidswap.exceptions import (
@@ -46,6 +47,8 @@ def sort_dict(d):
 def get_chain_index(chain):
     if chain == 'liquidv1':
         network = NETWORK_MAINNET
+    elif chain == 'liquidtestnet':
+        network = NETWORK_LIQUIDTESTNET
     else:
         network = NETWORK_REGTEST
     return network

@@ -6,11 +6,13 @@ IS_REPLACEABLE = True
 
 NETWORK_REGTEST = 0
 NETWORK_MAINNET = 1
+NETWORK_LIQUIDTESTNET = 2
 
 # network names used in error messages
 NETWORK_NAMES = {
     NETWORK_REGTEST: 'regtest',
     NETWORK_MAINNET: 'mainnet',
+    NETWORK_LIQUIDTESTNET: 'liquidtestnet',
 }
 
 # Use a p2sh-segwit (current liquid default) confidential dummy address so that
@@ -20,6 +22,8 @@ DUMMY_ADDRESS = {
     NETWORK_REGTEST: 'XBMEr9McFXkiLWTVqTyuNQR1CqKkMPMn6L',
     # mainnet: wally.base58check_from_bytes(b'\x27' + b'\x00'*20),
     NETWORK_MAINNET: 'GhBXQEdEh35AtuSNxMzRutcgYg3nkvq5Wb',
+    # liquidtestnet: wally.base58check_from_bytes(b'\x13' + b'\x00'*20)
+    NETWORK_LIQUIDTESTNET: '8eRTi4fUVRoeYEeeTyL4DPAwxatvbjaxFV',
 }
 # dummy_pubkey = b'\x02'*33
 DUMMY_ADDRESS_CONFIDENTIAL = {
@@ -29,6 +33,9 @@ DUMMY_ADDRESS_CONFIDENTIAL = {
     # mainnet: wally.confidential_addr_from_addr(dummy_add, 0x0c, dummy_pubkey)
     NETWORK_MAINNET: 'VJL5bwudesLgrLxF4SPVyxvoWrDJhBpKf9YxQgVpMzfuLDSGndbWS832vZmKoV5KhrC'
           '2RC4SKzvn2ZbE',
+    # liquidtestnet: wally.confidential_addr_from_addr(liquidtestnetaddr, 0x17, dummy_pubkey)
+    NETWORK_LIQUIDTESTNET: 'vjTtt1CgaXG8rm9cdWP8J1gz87XJ935zobn22v2usaqAod3xdnQVN6SiUM5waEjmZi'
+           'BDb2xBAGGuqPRb',
 }
 # FIXME: if the receiver wallet set another addresstype, then this choice may
 #        lead to an incorrect fee estimation. In addition, for better anonimity

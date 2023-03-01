@@ -17,7 +17,7 @@ from liquidswap.encode import encode_payload, decode_payload
 from liquidswap.asset_data import AssetsData
 from liquidswap.connect import ConnCtx, DEFAULT_REGTEST_RPC_PORT
 from liquidswap.constants import PROPOSED_KEYS, ACCEPTED_KEYS
-from liquidswap.constants import PROPOSED_KEYS, ACCEPTED_KEYS, NETWORK_REGTEST, NETWORK_MAINNET
+from liquidswap.constants import PROPOSED_KEYS, ACCEPTED_KEYS, NETWORK_REGTEST, NETWORK_MAINNET, NETWORK_LIQUIDTESTNET
 from liquidswap.exceptions import LiquidSwapError
 from liquidswap import __version__
 from liquidswap.util import (
@@ -481,15 +481,27 @@ def parse_args():
                         help='Specify Elements node URL for authentication.')
     parser.add_argument('-r', '--regtest', action='store_true',
                         help='Use with regtest.')
+    parser.add_argument('-t', '--testnet', action='store_true',
+                        help='Use with liquidtestnet.')
     parser.add_argument('-v', '--verbose', action='count',
                         help='Be more verbose, may be used multiple times.')
     args = parser.parse_args()
     set_logging(args.verbose or 0)
 
+    if args.regtest and args.testnet:
+        print("Can't use regtest and testnet at the same time")
+        sys.exit(-1)
+    if args.regtest:
+        network = NETWORK_REGTEST
+    elif args.testnet:
+        network = NETWORK_LIQUIDTESTNET
+    else:
+        network = NETWORK_MAINNET
+
     return {
         'service_url': args.service_url,
         'elements_conf_file': args.conf_file,
-        'network': NETWORK_REGTEST if args.regtest else NETWORK_MAINNET
+        'network': network
     }
 
 

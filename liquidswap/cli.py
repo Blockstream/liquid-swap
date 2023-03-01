@@ -7,7 +7,7 @@ from collections import namedtuple
 from liquidswap import swap
 from liquidswap.encode import encode_payload, decode_payload
 from liquidswap.connect import ConnCtx, DEFAULT_REGTEST_RPC_PORT
-from liquidswap.constants import PROPOSED_KEYS, ACCEPTED_KEYS, NETWORK_REGTEST, NETWORK_MAINNET
+from liquidswap.constants import PROPOSED_KEYS, ACCEPTED_KEYS, NETWORK_REGTEST, NETWORK_MAINNET, NETWORK_LIQUIDTESTNET
 from liquidswap.util import (
     set_logging,
     do_initial_checks,
@@ -39,17 +39,27 @@ ConnParams = namedtuple('ConnParams', ['credentials', 'network'])
 @click.option('-c', '--conf-file', default=None, type=str,
               help='Specify elements.conf file for authentication.')
 @click.option('-r', '--regtest', is_flag=True, help='Use with regtest.')
+@click.option('-t', '--testnet', is_flag=True, help='Use with liquidtestnet.')
 @click.option('-v', '--verbose', count=True,
               help='Print more information, may be used multiple times.')
 @click.version_option()
 @click.pass_context
-def cli(ctx, service_url, conf_file, regtest, verbose):
+def cli(ctx, service_url, conf_file, regtest, testnet, verbose):
     """Liquid Swap Tool Command-Line Interface
     """
 
     set_logging(verbose)
 
-    network = NETWORK_MAINNET if not regtest else NETWORK_REGTEST
+    if regtest and testnet:
+        print("Can't use regtest and testnet at the same time")
+        sys.exit(-1)
+    if regtest:
+        network = NETWORK_REGTEST
+    elif testnet:
+        network = NETWORK_LIQUIDTESTNET
+    else:
+        network = NETWORK_MAINNET
+
     credentials = {
         'elements_conf_file': conf_file,
         'service_url': service_url,

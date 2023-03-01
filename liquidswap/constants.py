@@ -7,6 +7,12 @@ IS_REPLACEABLE = True
 NETWORK_REGTEST = 0
 NETWORK_MAINNET = 1
 
+# network names used in error messages
+NETWORK_NAMES = {
+    NETWORK_REGTEST: 'regtest',
+    NETWORK_MAINNET: 'mainnet',
+}
+
 # Use a p2sh-segwit (current liquid default) confidential dummy address so that
 # fundrawtransaction allocates the right fees.
 DUMMY_ADDRESS = {

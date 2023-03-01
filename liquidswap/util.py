@@ -8,6 +8,7 @@ from liquidswap.constants import (
     OWN_PROPOSAL_ERROR_MSG,
     NETWORK_REGTEST,
     NETWORK_MAINNET,
+    NETWORK_NAMES,
 )
 from liquidswap.exceptions import (
     UnexpectedValueError,
@@ -107,10 +108,8 @@ def check_network(expected_network, connection):
     """
     network = get_chain_index(connection.getblockchaininfo().get('chain'))
     if network != expected_network:
-        networks = ('regtest', 'mainnet')
-        exp, found = networks if network == NETWORK_MAINNET else reversed(networks)
         msg = 'Network mismatch: tool expecting {}, node using {}.'.format(
-            exp, found)
+            NETWORK_NAMES[expected_network], NETWORK_NAMES[network])
         raise UnexpectedValueError(msg)
 
 

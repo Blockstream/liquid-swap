@@ -4,21 +4,24 @@ ELEMENTS_MIN_VERSION = 170000
 NLOCKTIME = 0
 IS_REPLACEABLE = True
 
+NETWORK_REGTEST = 0
+NETWORK_MAINNET = 1
+
 # Use a p2sh-segwit (current liquid default) confidential dummy address so that
 # fundrawtransaction allocates the right fees.
 DUMMY_ADDRESS = {
     # regtest: wally.base58check_from_bytes(b'\x4b' + b'\x00'*20),
-    False: 'XBMEr9McFXkiLWTVqTyuNQR1CqKkMPMn6L',
+    NETWORK_REGTEST: 'XBMEr9McFXkiLWTVqTyuNQR1CqKkMPMn6L',
     # mainnet: wally.base58check_from_bytes(b'\x27' + b'\x00'*20),
-    True: 'GhBXQEdEh35AtuSNxMzRutcgYg3nkvq5Wb',
+    NETWORK_MAINNET: 'GhBXQEdEh35AtuSNxMzRutcgYg3nkvq5Wb',
 }
 # dummy_pubkey = b'\x02'*33
 DUMMY_ADDRESS_CONFIDENTIAL = {
     # regtest: wally.confidential_addr_from_addr(dummy_add, 0x04, dummy_pubkey)
-    False: 'Azpj2QQw8ZGASK99L4BVKvH2xW9jerD9QrLenKUML7sQXMqJKJyYSwp99dASLbF5aR'
+    NETWORK_REGTEST: 'Azpj2QQw8ZGASK99L4BVKvH2xW9jerD9QrLenKUML7sQXMqJKJyYSwp99dASLbF5aR'
            'qXifmnTFhVzbZn',
     # mainnet: wally.confidential_addr_from_addr(dummy_add, 0x0c, dummy_pubkey)
-    True: 'VJL5bwudesLgrLxF4SPVyxvoWrDJhBpKf9YxQgVpMzfuLDSGndbWS832vZmKoV5KhrC'
+    NETWORK_MAINNET: 'VJL5bwudesLgrLxF4SPVyxvoWrDJhBpKf9YxQgVpMzfuLDSGndbWS832vZmKoV5KhrC'
           '2RC4SKzvn2ZbE',
 }
 # FIXME: if the receiver wallet set another addresstype, then this choice may

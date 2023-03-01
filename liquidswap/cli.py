@@ -7,7 +7,7 @@ from collections import namedtuple
 from liquidswap import swap
 from liquidswap.encode import encode_payload, decode_payload
 from liquidswap.connect import ConnCtx, DEFAULT_REGTEST_RPC_PORT
-from liquidswap.constants import PROPOSED_KEYS, ACCEPTED_KEYS
+from liquidswap.constants import PROPOSED_KEYS, ACCEPTED_KEYS, NETWORK_REGTEST, NETWORK_MAINNET
 from liquidswap.util import (
     set_logging,
     do_initial_checks,
@@ -30,7 +30,7 @@ def critical(title='', message='', start_over=True):
         sys.exit(1)
 
 
-ConnParams = namedtuple('ConnParams', ['credentials', 'is_mainnet'])
+ConnParams = namedtuple('ConnParams', ['credentials', 'network'])
 
 
 @click.group()
@@ -49,14 +49,14 @@ def cli(ctx, service_url, conf_file, regtest, verbose):
 
     set_logging(verbose)
 
-    is_mainnet = not regtest
+    network = NETWORK_MAINNET if not regtest else NETWORK_REGTEST
     credentials = {
         'elements_conf_file': conf_file,
         'service_url': service_url,
-        'service_port': (None if is_mainnet else DEFAULT_REGTEST_RPC_PORT),
+        'service_port': (None if network == NETWORK_MAINNET else DEFAULT_REGTEST_RPC_PORT),
     }
 
-    ctx.obj = ConnParams(credentials, is_mainnet)
+    ctx.obj = ConnParams(credentials, network)
 
 
 @cli.command(short_help='Show proposal in human readable format')
@@ -70,7 +70,7 @@ def info(obj, payload):
 
     with ConnCtx(obj.credentials, critical) as cc:
         connection = cc.connection
-        do_initial_checks(connection, obj.is_mainnet)
+        do_initial_checks(connection, obj.network)
 
         proposal = decode_payload(payload.read())
         status = get_status(proposal)
@@ -133,7 +133,7 @@ def propose(obj, asset_p, amount_p, asset_r, amount_r, output, fee_rate):
 
     with ConnCtx(obj.credentials, critical) as cc:
         connection = cc.connection
-        do_initial_checks(connection, obj.is_mainnet)
+        do_initial_checks(connection, obj.network)
 
         proposal = swap.propose(btc2sat(amount_p), asset_p,
                                 btc2sat(amount_r), asset_r,
@@ -157,7 +157,7 @@ def accept(obj, payload, output, fee_rate):
 
     with ConnCtx(obj.credentials, critical) as cc:
         connection = cc.connection
-        do_initial_checks(connection, obj.is_mainnet)
+        do_initial_checks(connection, obj.network)
         proposal = decode_payload(payload.read())
 
         check_wallet_unlocked(connection)
@@ -183,7 +183,7 @@ def finalize(obj, payload, send):
 
     with ConnCtx(obj.credentials, critical) as cc:
         connection = cc.connection
-        do_initial_checks(connection, obj.is_mainnet)
+        do_initial_checks(connection, obj.network)
         proposal = decode_payload(payload.read())
         check_wallet_unlocked(connection)
         check_not_mine(proposal['u_address_r'], connection)

@@ -25,6 +25,7 @@ from liquidswap.util import (
     values2btc,
     is_mine,
     sort_dict,
+    get_chain_index,
 )
 
 
@@ -54,7 +55,7 @@ def propose(amount_p, asset_p,
         raise SameAssetError('Swaps between the same asset are currently not '
                              'supported.')
 
-    is_mainnet = connection.getblockchaininfo().get('chain') == 'liquidv1'
+    network = get_chain_index(connection.getblockchaininfo().get('chain'))
 
     c_address_p = connection.getnewaddress()
     u_address_p = connection.getaddressinfo(c_address_p)['unconfidential']
@@ -63,15 +64,15 @@ def propose(amount_p, asset_p,
     if elements_version < 210000:
         txu = connection.createrawtransaction(
             [],
-            {DUMMY_ADDRESS_CONFIDENTIAL[is_mainnet]: sat2btc(amount_p)},
+            {DUMMY_ADDRESS_CONFIDENTIAL[network]: sat2btc(amount_p)},
             NLOCKTIME,
             IS_REPLACEABLE,
-            {DUMMY_ADDRESS_CONFIDENTIAL[is_mainnet]: asset_p}
+            {DUMMY_ADDRESS_CONFIDENTIAL[network]: asset_p}
         )
     else:
         txu = connection.createrawtransaction(
             [],
-            [{DUMMY_ADDRESS_CONFIDENTIAL[is_mainnet]: sat2btc(amount_p), 'asset': asset_p}],
+            [{DUMMY_ADDRESS_CONFIDENTIAL[network]: sat2btc(amount_p), 'asset': asset_p}],
             NLOCKTIME,
             IS_REPLACEABLE
         )
@@ -121,7 +122,7 @@ def propose(amount_p, asset_p,
             u_address = output['scriptPubKey']['address']
 
         if u_address is not None:
-            if u_address == DUMMY_ADDRESS[is_mainnet]:
+            if u_address == DUMMY_ADDRESS[network]:
                 key = u_address
             else:
                 c_address = connection.getaddressinfo(
@@ -182,7 +183,7 @@ def parse_proposed(tx,
     logging.debug('Address map: {}'.format(map_confidential))
     logging.debug('Unspents_details: {}'.format(unspents_details))
 
-    is_mainnet = connection.getblockchaininfo().get('chain') == 'liquidv1'
+    network = get_chain_index(connection.getblockchaininfo().get('chain'))
 
     is_proposer = is_mine(u_address_p, connection)
     if is_proposer:
@@ -209,7 +210,7 @@ def parse_proposed(tx,
             u_address = output['scriptPubKey']['address']
 
         if u_address is not None:
-            if u_address == DUMMY_ADDRESS[is_mainnet]:
+            if u_address == DUMMY_ADDRESS[network]:
                 if asset_p:
                     raise UnexpectedValueError('Found more than one dummy '
                                                'address')

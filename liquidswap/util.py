@@ -6,6 +6,8 @@ from liquidswap.constants import (
     ELEMENTS_MIN_VERSION,
     WALLET_MIN_VERSION,
     OWN_PROPOSAL_ERROR_MSG,
+    NETWORK_REGTEST,
+    NETWORK_MAINNET,
 )
 from liquidswap.exceptions import (
     UnexpectedValueError,
@@ -38,6 +40,14 @@ def values2btc(m, a):
 
 def sort_dict(d):
     return {k: v for k, v in sorted(d.items())}
+
+
+def get_chain_index(chain):
+    if chain == 'liquidv1':
+        network = NETWORK_MAINNET
+    else:
+        network = NETWORK_REGTEST
+    return network
 
 
 def is_mine(address, connection):
@@ -92,25 +102,24 @@ def check_wallet_unlocked(connection):
         raise LockedWalletError('Wallet locked, please unlock it to proceed')
 
 
-def check_network(expect_mainnet, connection):
+def check_network(expected_network, connection):
     """Raise error if expected network and node network mismatch
     """
-    blockchain_info = connection.getblockchaininfo()
-    is_mainnet = blockchain_info.get('chain') == 'liquidv1'
-    if is_mainnet != expect_mainnet:
+    network = get_chain_index(connection.getblockchaininfo().get('chain'))
+    if network != expected_network:
         networks = ('regtest', 'mainnet')
-        exp, found = networks if is_mainnet else reversed(networks)
+        exp, found = networks if network == NETWORK_MAINNET else reversed(networks)
         msg = 'Network mismatch: tool expecting {}, node using {}.'.format(
             exp, found)
         raise UnexpectedValueError(msg)
 
 
-def do_initial_checks(connection, expect_mainnet):
+def do_initial_checks(connection, expected_network):
     """Do initial checks
     """
     check_liquid_version(connection)
     check_wallet_version(connection)
-    check_network(expect_mainnet, connection)
+    check_network(expected_network, connection)
 
 
 def set_logging(verbose):

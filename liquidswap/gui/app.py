@@ -17,6 +17,7 @@ from liquidswap.encode import encode_payload, decode_payload
 from liquidswap.asset_data import AssetsData
 from liquidswap.connect import ConnCtx, DEFAULT_REGTEST_RPC_PORT
 from liquidswap.constants import PROPOSED_KEYS, ACCEPTED_KEYS
+from liquidswap.constants import PROPOSED_KEYS, ACCEPTED_KEYS, NETWORK_REGTEST, NETWORK_MAINNET
 from liquidswap.exceptions import LiquidSwapError
 from liquidswap import __version__
 from liquidswap.util import (
@@ -352,21 +353,21 @@ class LiquidSwapToolWindow(QMainWindow):
     """Parent window holding session data"""
 
     def __init__(self, service_url=None, elements_conf_file=None,
-                 is_mainnet=False):
+                 network=NETWORK_REGTEST):
         QMainWindow.__init__(self)
 
         self.credentials = {
             'elements_conf_file': elements_conf_file,
             'service_url': service_url,
-            'service_port': (None if is_mainnet else DEFAULT_REGTEST_RPC_PORT),
+            'service_port': (None if network == NETWORK_MAINNET else DEFAULT_REGTEST_RPC_PORT),
         }
-        self.is_mainnet = is_mainnet
+        self.network = network
         self.asset_data = AssetsData()
 
         self.center()
 
         with ConnCtx(self.credentials, self.critical) as cc:
-            do_initial_checks(cc.connection, is_mainnet)
+            do_initial_checks(cc.connection, network)
 
         InitialWindow(parent=self)
 
@@ -395,7 +396,7 @@ class LiquidSwapToolWindow(QMainWindow):
                 temp = self.credentials
                 temp['elements_conf_file'] = filename
                 with ConnCtx(temp, self.critical) as cc:
-                    do_initial_checks(cc.connection, self.is_mainnet)
+                    do_initial_checks(cc.connection, self.network)
                     self.credentials = temp
                     set_conf_tip(self.credentials['elements_conf_file'],
                                  action)
@@ -410,7 +411,7 @@ class LiquidSwapToolWindow(QMainWindow):
             temp = self.credentials
             temp['service_url'] = d.lineEditURL.text()
             with ConnCtx(temp, self.critical) as cc:
-                do_initial_checks(cc.connection, self.is_mainnet)
+                do_initial_checks(cc.connection, self.network)
                 self.credentials = temp
                 set_url_tip(self.credentials['service_url'], action)
 
@@ -481,14 +482,14 @@ def parse_args():
     return {
         'service_url': args.service_url,
         'elements_conf_file': args.conf_file,
-        'is_mainnet': not args.regtest,
+        'network': NETWORK_REGTEST if args.regtest else NETWORK_MAINNET
     }
 
 
 def main(parse=True):
     handle_high_resolution_display()
     app = QApplication(sys.argv)
-    kwargs = parse_args() if parse else {'is_mainnet': True}
+    kwargs = parse_args() if parse else {'network': NETWORK_MAINNET}
     ex = LiquidSwapToolWindow(**kwargs)
     ex.show()
     sys.exit(app.exec_())

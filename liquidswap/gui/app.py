@@ -366,8 +366,15 @@ class LiquidSwapToolWindow(QMainWindow):
 
         self.center()
 
+        exit = False
         with ConnCtx(self.credentials, self.critical) as cc:
-            do_initial_checks(cc.connection, network)
+            try:
+                do_initial_checks(cc.connection, network)
+            except Exception as e:
+                exit = True
+                raise(e)
+        if exit:
+            sys.exit(-1)
 
         InitialWindow(parent=self)
 

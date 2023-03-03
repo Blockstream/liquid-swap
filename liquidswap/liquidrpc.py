@@ -106,17 +106,6 @@ class BaseProxy(object):
                     elements_conf_file = os.path.expanduser('~/.elements')
                 elements_conf_file = os.path.join(elements_conf_file, 'elements.conf')
 
-            # To avoid backward incompatibilty, try to look for the liquid
-            # binaries default dir and conf.
-            if not os.path.exists(elements_conf_file):
-                if platform.system() == 'Darwin':
-                    elements_conf_file = os.path.expanduser('~/Library/Application Support/Liquid/')
-                elif platform.system() == 'Windows':
-                    elements_conf_file = os.path.join(os.environ['APPDATA'], 'Liquid')
-                else:
-                    elements_conf_file = os.path.expanduser('~/.liquid')
-                elements_conf_file = os.path.join(elements_conf_file, 'liquid.conf')
-
             # Elements Core accepts empty rpcuser, not specified in elements_conf_file
             conf = {'rpcuser': ""}
 
